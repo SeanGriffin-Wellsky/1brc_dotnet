@@ -1,32 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a0a7917b_002D7279_002D4e5d_002D88d9_002D4a2950721d60/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="EmptyBlock" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockTest&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestNullBlock&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestEmptyBlock&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestOneLineBlock_EndsInNewLine&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestOneLineBlock_DoesNotEndInNewLine&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestBlock_10Lines_NoSupplemental&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockProcessorTest.TestBlock_15Lines_WithSupplemental&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockReaderTest.TestEmptyReturnsEmptyBlock&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockReaderTest.TestSmallReturnsAllChars&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockReaderTest.TestExactly64KReturnsAllChars&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockReaderTest.TestGreaterThan64KReturnsAllChars&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.BlockReaderTest&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.CityTemperatureStatsTest.EnsureCitiesAreUnique&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.CityTemperatureStatCalcTest&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.HashCodeGeneratorTest.GenerateHashCode_1Char&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.HashCodeGeneratorTest.GenerateHashCode_5Char&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.HashCodeGeneratorTest.GenerateHashCode_10Char&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.HashCodeGeneratorTest.GenerateHashCode_4Char&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.HashCodeGeneratorTest&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.ParseFloatTest.TestCustomParsing&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.ParseFloatTest.TestCustomParsing_NegativeFullLength&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.MemoryMappedFilePartitionerTest&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.FilePartitionerTest.TestEmptyReturnsNoPartitions&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.FilePartitionerTest.TestSmallReturnsSinglePartition&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.FilePartitionerTest.TestExactly64K_ReturnsSinglePartition&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.FilePartitionerTest.TestGreaterThan64KReturnsAllChars&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8E0C0A2D-F6FE-48A8-BDCA-0D280D127B3A::net8.0::Tests.FilePartitionerTest.TestGreaterThan128KReturnsAllChars&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -7,7 +7,7 @@ public class Program
 {
     private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
-    private static readonly string InputFile = "/Users/seangriffin/Coding/1brc_dotnet/ConsoleApp/resources/measurements_large.txt";
+    private static readonly string InputFile = "./resources/measurements_1B.txt";
 
     public static async Task Main(string[] args)
     {

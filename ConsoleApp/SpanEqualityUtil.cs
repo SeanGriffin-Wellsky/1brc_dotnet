@@ -6,7 +6,7 @@ namespace ConsoleApp;
 
 public static class SpanEqualityUtil
 {
-    private static readonly ConcurrentDictionary<int, int> HashCodes = [];
+    //private static readonly ConcurrentDictionary<int, int> HashCodes = [];
 
     public static bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => x.SequenceEqual(y);
 
@@ -25,8 +25,8 @@ public static class SpanEqualityUtil
         return hash ^ span.Length;
 
         //HashCodes[Encoding.UTF8.GetString(span.ToArray())] = hash;
-        HashCodes[hash] = hash;
-        return hash;
+        // HashCodes[hash] = hash;
+        // return hash;
     }
 
  //   public static IDictionary<int, int> GetHashCodes => HashCodes;
