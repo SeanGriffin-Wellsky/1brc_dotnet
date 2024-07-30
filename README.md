@@ -16,3 +16,7 @@ Apple SSD AP0512N 512 GB
 234,833ms (234.833s, 3m54s)
 7.47 GB in LOH
 GC time is ~17.5% of total time
+
+## Pre-allocate Temperature List
+
+233,307ms (233.307s, 3m53s) - 0.65% improvement
