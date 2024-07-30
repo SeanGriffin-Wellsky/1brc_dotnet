@@ -3,57 +3,63 @@ using System.Text;
 
 namespace ConsoleApp;
 
+record TemperatureStats(float Min, float Avg, float Max)
+{
+    public override string ToString()
+    {
+        return $"{Min:F1}/{Avg:F1}/{Max:F1}";
+    }
+}
+
 public class Program
 {
     private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
     private static readonly string InputFile = "./resources/measurements_1B.txt";
 
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
 
-        await using var reader = File.OpenRead(InputFile);
-        using var fileHandle = reader.SafeFileHandle;
+        var cityWithTemps = new Dictionary<string, List<float>>();
+        var cityWithTempStats = new SortedDictionary<string, TemperatureStats>(StringComparer.Ordinal);
 
-        var totalCalc = new CityTemperatureStatCalc(ExpectedCityCnt);
-        var partitions = FilePartitioner.PartitionFile(reader, BufferSize);
-        var processorTasks = new Task<CityTemperatureStatCalc>[partitions.Count];
+        using var reader = File.OpenText(InputFile);
+        var line = reader.ReadLine();
 
-        for (var i = 0; i < partitions.Count; i++)
+        while (line is not null)
         {
-            var state = new ProcessingState(ExpectedCityCnt, fileHandle, partitions[i]);
-            processorTasks[i] = Task<CityTemperatureStatCalc>.Factory.StartNew(
-                PartitionProcessor.ProcessPartition, state);
+            var cityTemp = line.Split(';'); // 105 GB allocated in SOH
+            var city = cityTemp[0];
+            var temp = float.Parse(cityTemp[1]);
+
+            if (!cityWithTemps.TryGetValue(city, out var temps)) // 47 GB allocated in SOH
+            {
+                temps = new List<float>();
+                cityWithTemps.Add(city, temps);
+            }
+
+            temps.Add(temp); // 12.86 GB allocated in LOH
+
+            line = reader.ReadLine();
         }
 
-        foreach (var calcTask in Interleaved(processorTasks))
+        foreach (var cityTemps in cityWithTemps)
         {
-            totalCalc.Merge(await calcTask.Unwrap().ConfigureAwait(false));
+            var stats = new TemperatureStats(cityTemps.Value.Min(), cityTemps.Value.Average(), cityTemps.Value.Max());
+            cityWithTempStats.Add(cityTemps.Key, stats);
         }
 
-        // var tempPath = Path.GetTempFileName();
-        // Console.WriteLine($"HashCodes stored in {tempPath}");
-        // await using var tempFile = File.CreateText(tempPath);
-        // foreach (var hc in SpanEqualityUtil.GetHashCodes)
-        // {
-        //     var modular = (hc.Key & 0x7fffffff) % 3319;
-        //     tempFile.WriteLine(modular);
-        // }
-        // tempFile.Close();
+        cityWithTemps = null;
 
         var finalBuffer = new StringBuilder(12 * 1024);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",
-            totalCalc.FinalizeStats().Select(kv =>
-                $"{kv.Key}={kv.Value.Min:F1}/{kv.Value.TemperatureAvg:F1}/{kv.Value.Max:F1}"));
+            cityWithTempStats.Select(kv => $"{kv.Key}={kv.Value}"));
         finalBuffer.Append('}');
         Console.WriteLine(finalBuffer);
 
         sw.Stop();
-        Console.WriteLine($"Num blocks: {partitions.Count}");
-        Console.WriteLine($"Num threads in pool: {ThreadPool.ThreadCount}");
-        Console.WriteLine($"Num cities: {totalCalc.NumCities}");
         Console.WriteLine($"Total time: {sw.ElapsedMilliseconds}ms");
     }
 
