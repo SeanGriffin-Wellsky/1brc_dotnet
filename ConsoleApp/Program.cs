@@ -15,8 +15,9 @@ public class Program
 {
     private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
-    private static readonly string InputFile = "./resources/measurements_1B.txt";
+    private static readonly string InputFile = "./resources/measurements_100M.txt";
 
+    // 54.7% on native code - ??
     public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
@@ -25,18 +26,18 @@ public class Program
         var cityWithTempStats = new SortedDictionary<string, TemperatureStats>(StringComparer.Ordinal);
 
         using var reader = File.OpenText(InputFile);
-        var line = reader.ReadLine();
+        var line = reader.ReadLine(); // 87.9% of Main time
 
         while (line is not null)
         {
-            var cityTemp = line.Split(';'); // 105 GB allocated in SOH
+            var cityTemp = line.Split(';'); // 105 GB allocated in SOH, 2.07% of Main time
             var city = cityTemp[0];
-            var temp = float.Parse(cityTemp[1]);
+            var temp = float.Parse(cityTemp[1]); // 2% of Main time
 
-            if (!cityWithTemps.TryGetValue(city, out var temps)) // 47 GB allocated in SOH
+            if (!cityWithTemps.TryGetValue(city, out var temps)) // 47 GB allocated in SOH, 1.54% of Main time
             {
                 temps = new List<float>();
-                cityWithTemps.Add(city, temps);
+                cityWithTemps.Add(city, temps); // 1.14% of Main time
             }
 
             temps.Add(temp); // 12.86 GB allocated in LOH
@@ -46,7 +47,7 @@ public class Program
 
         foreach (var cityTemps in cityWithTemps)
         {
-            var stats = new TemperatureStats(cityTemps.Value.Min(), cityTemps.Value.Average(), cityTemps.Value.Max());
+            var stats = new TemperatureStats(cityTemps.Value.Min() /* 0.47% */, cityTemps.Value.Average() /* 1.3% */, cityTemps.Value.Max() /* 0.37% */);
             cityWithTempStats.Add(cityTemps.Key, stats);
         }
 
