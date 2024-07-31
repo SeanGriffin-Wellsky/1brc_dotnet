@@ -16,7 +16,7 @@ public static class Runner
         using var reader = File.OpenRead(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 4.71% of Main time, 0.36% in IO
+        var block = blockReader.ReadNextBlock(); // 5.76% of Main time, 2.28% in IO
         while (!block.IsEmpty)
         {
             var blockBytes = block.Bytes;
@@ -32,13 +32,12 @@ public static class Runner
 
                     var semicolonPos = line.IndexOf(Constants.Semicolon);
 
-                    // 6.44% of Main time in both these ToArray calls
-                    // 12.8% of Main time in these Encoding.UTF8.GetString calls
-                    var city = Encoding.UTF8.GetString(line[..semicolonPos].ToArray());
-                    var tempStr = Encoding.UTF8.GetString(line[(semicolonPos + 1)..].ToArray());
-                    var temp = float.Parse(tempStr); // 21.2% of Main time
+                    // 8.69% of Main time in these Encoding.UTF8.GetString calls
+                    var city = Encoding.UTF8.GetString(line[..semicolonPos]);
+                    var tempStr = Encoding.UTF8.GetString(line[(semicolonPos + 1)..]);
+                    var temp = float.Parse(tempStr); // 24.8% of Main time
 
-                    if (!cityWithTemps.TryGetValue(city, out var temps)) // 16% of Main time
+                    if (!cityWithTemps.TryGetValue(city, out var temps)) // 19.7% of Main time
                     {
                         temps = new List<float>(2450000);
                         cityWithTemps.Add(city, temps);

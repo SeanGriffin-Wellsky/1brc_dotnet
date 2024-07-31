@@ -4,12 +4,12 @@ using System.Runtime.InteropServices.JavaScript;
 
 namespace ConsoleApp;
 
-public readonly struct Block
+public readonly ref struct Block
 {
     public Block()
     {
         Length = 0;
-        Bytes = ImmutableArray<byte>.Empty;
+        Bytes = ReadOnlySpan<byte>.Empty;
     }
 
     public Block(byte[] initialBuffer, byte[] supplementalBuffer)
@@ -23,12 +23,12 @@ public readonly struct Block
         initialBuffer.CopyTo(totalBlock, 0);
         supplementalBuffer.CopyTo(totalBlock, initialBuffer.Length);
 
-        Bytes = totalBlock.ToImmutableArray();
+        Bytes = totalBlock.AsSpan();
     }
 
     public bool IsEmpty => Length == 0;
 
-    public ImmutableArray<byte> Bytes { get; }
+    public ReadOnlySpan<byte> Bytes { get; }
 
     public int Length { get; }
 }

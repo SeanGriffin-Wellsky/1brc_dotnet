@@ -32,3 +32,10 @@ GC time is ~17.3% of total time
 GC time is ~23% of total time
 
 ![Memory Snapshot](./assets/MemorySnapshot1.png)
+
+## Read into blocks of byte spans
+
+199,262ms (199.262s, 3m19s) - 15.1% improvement over baseline
+GC time is ~13% of total time
+
+![Memory Snapshot](./assets/MemorySnapshot2.png)

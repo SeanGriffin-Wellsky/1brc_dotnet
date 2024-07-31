@@ -16,7 +16,7 @@ public class Program
 {
     private static readonly string InputFile = "./resources/measurements_1B.txt";
 
-    // 59.3% in native code - ??
+    // 64.4% in native code - ??
     public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
