@@ -50,3 +50,20 @@ Heap bounces between 380 MB and 770 MB in LOH
 GC time is ~6.7% of total time (15,532ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot4.png)
+
+Benchmark of `TryGetValue` + `Add` on `SortedDictionary` vs `Dictionary`:
+
+| Method                        | Mean      | Error    | StdDev   | Ratio | Gen0   | Gen1   | Allocated | Alloc Ratio |
+|------------------------------ |----------:|---------:|---------:|------:|-------:|-------:|----------:|------------:|
+| TryGetValue_SortedDictionary  | 108.24 us | 1.934 us | 1.809 us |  1.00 | 2.6855 | 0.1221 |   22.7 KB |        1.00 |
+| TryGetValue_RegularDictionary |  13.77 us | 0.262 us | 0.367 us |  0.13 | 2.6550 |      - |  21.79 KB |        0.96 |
+
+## Use Dictionary over SortedDictionary when gathering data
+
+154,939ms (154.939s, 2m34s) - 34.1% improvement over baseline
+
+## Use custom temperature parsing
+
+95,168ms (95.168s, 1m35s) - 59.4% improvement over baseline
+
+![Timeline](./assets/Timeline1.png)
