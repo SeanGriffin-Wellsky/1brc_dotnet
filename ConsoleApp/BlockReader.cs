@@ -9,34 +9,34 @@ public readonly ref struct Block
     public Block()
     {
         Length = 0;
-        Bytes = ReadOnlySpan<byte>.Empty;
+        Chars = ReadOnlySpan<char>.Empty;
     }
 
-    public Block(byte[] initialBuffer, byte[] supplementalBuffer)
+    public Block(char[] initialBuffer, char[] supplementalBuffer)
     {
         Debug.Assert(initialBuffer.Length > 0);
 
         Length = initialBuffer.Length + supplementalBuffer.Length;
 
-        var totalBlock = new byte[Length];
+        var totalBlock = new char[Length];
 
         initialBuffer.CopyTo(totalBlock, 0);
         supplementalBuffer.CopyTo(totalBlock, initialBuffer.Length);
 
-        Bytes = totalBlock.AsSpan();
+        Chars = totalBlock.AsSpan();
     }
 
     public bool IsEmpty => Length == 0;
 
-    public ReadOnlySpan<byte> Bytes { get; }
+    public ReadOnlySpan<char> Chars { get; }
 
     public int Length { get; }
 }
 
-public sealed class BlockReader(Stream reader, int bufferSize)
+public sealed class BlockReader(StreamReader reader, int bufferSize)
 {
-    private readonly byte[] _buffer = new byte[bufferSize];
-    private readonly byte[] _supplementalBuffer = new byte[105];
+    private readonly char[] _buffer = new char[bufferSize];
+    private readonly char[] _supplementalBuffer = new char[105];
 
     public Block ReadNextBlock()
     {
@@ -48,20 +48,20 @@ public sealed class BlockReader(Stream reader, int bufferSize)
 
         if (numRead < bufferSize)
         {
-            return new Block(_buffer[..numRead], Array.Empty<byte>());
+            return new Block(_buffer[..numRead], Array.Empty<char>());
         }
 
         var supplementalBufferPos = -1;
-        var nextByte = reader.ReadByte();
+        var nextByte = reader.Read();
 
         while (nextByte != -1)
         {
-            _supplementalBuffer[++supplementalBufferPos] = (byte) nextByte;
+            _supplementalBuffer[++supplementalBufferPos] = (char) nextByte;
 
             if (nextByte == '\n')
                 break;
 
-            nextByte = reader.ReadByte();
+            nextByte = reader.Read();
         }
 
         return new Block(_buffer, _supplementalBuffer[..(supplementalBufferPos+1)]);

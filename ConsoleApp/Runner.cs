@@ -13,39 +13,33 @@ public static class Runner
         var cityWithTemps = new Dictionary<string, List<float>>();
         var cityWithTempStats = new SortedDictionary<string, TemperatureStats>(StringComparer.Ordinal);
 
-        using var reader = File.OpenRead(filePath);
+        using var reader = File.OpenText(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 5.76% of Main time, 2.28% in IO
+        var block = blockReader.ReadNextBlock(); // 13.8% of Main time, 6.2% in IO
         while (!block.IsEmpty)
         {
-            var blockBytes = block.Bytes;
+            var blockChars = block.Chars;
 
-            var startOfNewLine = 0;
-            for (var i = 0; i < blockBytes.Length; ++i)
+            var lines = blockChars.EnumerateLines();
+            foreach (var line in lines)
             {
-                if (blockBytes[i] == Constants.NewLine)
+                if (line.IsEmpty)
+                    continue;
+
+                var semicolonPos = line.IndexOf(';'); // 4% of Main time
+
+                var city = line[..semicolonPos].ToString(); // 2.23% of Main time
+                var tempStr = line[(semicolonPos + 1)..];
+                var temp = float.Parse(tempStr); // 28.1% of Main time
+
+                if (!cityWithTemps.TryGetValue(city, out var temps)) // 19.2% of Main time
                 {
-                    var line = blockBytes.Slice(startOfNewLine, i - startOfNewLine);
-                    if (line.IsEmpty)
-                        continue;
-
-                    var semicolonPos = line.IndexOf(Constants.Semicolon);
-
-                    // 8.69% of Main time in these Encoding.UTF8.GetString calls
-                    var city = Encoding.UTF8.GetString(line[..semicolonPos]);
-                    var tempStr = Encoding.UTF8.GetString(line[(semicolonPos + 1)..]);
-                    var temp = float.Parse(tempStr); // 24.8% of Main time
-
-                    if (!cityWithTemps.TryGetValue(city, out var temps)) // 19.7% of Main time
-                    {
-                        temps = new List<float>(2450000);
-                        cityWithTemps.Add(city, temps);
-                    }
-
-                    temps.Add(temp);
-                    startOfNewLine = i + 1;
+                    temps = new List<float>(2450000);
+                    cityWithTemps.Add(city, temps);
                 }
+
+                temps.Add(temp);
             }
 
             block = blockReader.ReadNextBlock();
