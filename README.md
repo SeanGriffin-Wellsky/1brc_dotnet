@@ -72,6 +72,7 @@ Before:
 ![Before Renting Timeline](./assets/BeforeRentTimeline.png)
 ![Before Renting Memory Allocation](./assets/BeforeRentMemoryAlloc.png)
 
+Heap bounces between 390 MB and 1.26 GB in LOH\
 GC time is 13.4% of total time (12,753ms)
 
 After:
@@ -79,4 +80,5 @@ After:
 ![After Renting Memory Allocation](./assets/AfterRentMemoryAlloc.png)
 
 82,026ms (82.026s, 1m22s) - 65.1% improvement over baseline\
+Heap stays constant around 390 MB in LOH\
 GC time is 15.2% of total time (12,468ms)
