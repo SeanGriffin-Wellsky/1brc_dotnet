@@ -42,3 +42,11 @@ GC time is ~13% of total time (25,904ms)
 GC time is ~7% of total time (11,683ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot3.png)
+
+## Calculate temperature statistics on the fly
+
+231,824ms (231.824s, 3m51s) - 1.3% improvement over baseline
+Heap bounces between 380 MB and 770 MB in LOH
+GC time is ~6.7% of total time (15,532ms)
+
+![Memory Snapshot](./assets/MemorySnapshot4.png)
