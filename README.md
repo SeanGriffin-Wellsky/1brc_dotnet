@@ -19,9 +19,16 @@ GC time is ~17.5% of total time
 
 ## Pre-allocate Temperature List
 
-233,307ms (233.307s, 3m53s) - 0.65% improvement
+233,307ms (233.307s, 3m53s) - 0.65% improvement over baseline
 
 ## Read into blocks of char arrays
 
-253,976ms (253.976s, 4m14s) - 8.9% slower
+253,976ms (253.976s, 4m14s) - 8.2% slower than baseline
 GC time is ~17.3% of total time
+
+## Read into blocks of byte arrays
+
+372,823ms (372.823s, 6m13s) - 58.8% slower than baseline
+GC time is ~23% of total time
+
+![Memory Snapshot](./assets/MemorySnapshot1.png)

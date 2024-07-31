@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text;
 
 namespace ConsoleApp;
@@ -12,29 +13,40 @@ public static class Runner
         var cityWithTemps = new Dictionary<string, List<float>>();
         var cityWithTempStats = new SortedDictionary<string, TemperatureStats>(StringComparer.Ordinal);
 
-        using var reader = File.OpenText(filePath);
+        using var reader = File.OpenRead(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 15.3% of Main time (4.4% was in IO); 51 GB in LOH
+        var block = blockReader.ReadNextBlock(); // 4.71% of Main time, 0.36% in IO
         while (!block.IsEmpty)
         {
-            var lines = block.Chars.AsSpan().EnumerateLines();
-            foreach (var line in lines)
+            var blockBytes = block.Bytes;
+
+            var startOfNewLine = 0;
+            for (var i = 0; i < blockBytes.Length; ++i)
             {
-                if (line.IsEmpty)
-                    continue;
-
-                var cityTemp = line.ToString().Split(';'); // 17.4% of Main time; 152 GB in SOH
-                var city = cityTemp[0];
-                var temp = float.Parse(cityTemp[1]); // 23.2% of Main time
-
-                if (!cityWithTemps.TryGetValue(city, out var temps)) // 16.1% of Main time; 47 GB allocated in SOH
+                if (blockBytes[i] == Constants.NewLine)
                 {
-                    temps = new List<float>(2450000); // 0.04% of Main time; 3.8 GB in SOH
-                    cityWithTemps.Add(city, temps); // Negligible time
-                }
+                    var line = blockBytes.Slice(startOfNewLine, i - startOfNewLine);
+                    if (line.IsEmpty)
+                        continue;
 
-                temps.Add(temp);
+                    var semicolonPos = line.IndexOf(Constants.Semicolon);
+
+                    // 6.44% of Main time in both these ToArray calls
+                    // 12.8% of Main time in these Encoding.UTF8.GetString calls
+                    var city = Encoding.UTF8.GetString(line[..semicolonPos].ToArray());
+                    var tempStr = Encoding.UTF8.GetString(line[(semicolonPos + 1)..].ToArray());
+                    var temp = float.Parse(tempStr); // 21.2% of Main time
+
+                    if (!cityWithTemps.TryGetValue(city, out var temps)) // 16% of Main time
+                    {
+                        temps = new List<float>(2450000);
+                        cityWithTemps.Add(city, temps);
+                    }
+
+                    temps.Add(temp);
+                    startOfNewLine = i + 1;
+                }
             }
 
             block = blockReader.ReadNextBlock();

@@ -14,9 +14,9 @@ record TemperatureStats(float Min, float Avg, float Max)
 
 public class Program
 {
-    private static readonly string InputFile = "./resources/measurements_10M.txt";
+    private static readonly string InputFile = "./resources/measurements_1B.txt";
 
-    // 63.5% in native code - ??
+    // 59.3% in native code - ??
     public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
