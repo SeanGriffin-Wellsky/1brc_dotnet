@@ -10,10 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="resources\measurements_100K.txt">
+        <None Update="resources\measurements_5M.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="resources\measurements_5M.txt">
+        <None Update="resources\measurements_10M.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="resources\measurements_100M.txt">

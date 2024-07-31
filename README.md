@@ -20,3 +20,8 @@ GC time is ~17.5% of total time
 ## Pre-allocate Temperature List
 
 233,307ms (233.307s, 3m53s) - 0.65% improvement
+
+## Read into blocks of char arrays
+
+253,976ms (253.976s, 4m14s) - 8.9% slower
+GC time is ~17.3% of total time
