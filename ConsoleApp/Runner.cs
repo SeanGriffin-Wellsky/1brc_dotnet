@@ -40,6 +40,7 @@ public static class Runner
                 temps.AddTemperature(temp);
             }
 
+            block.Dispose();
             block = blockReader.ReadNextBlock();
         }
 

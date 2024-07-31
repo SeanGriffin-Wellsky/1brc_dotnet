@@ -66,4 +66,17 @@ Benchmark of `TryGetValue` + `Add` on `SortedDictionary` vs `Dictionary`:
 
 95,168ms (95.168s, 1m35s) - 59.4% improvement over baseline
 
-![Timeline](./assets/Timeline1.png)
+## Rent array blocks instead of allocating new ones
+
+Before:
+![Before Renting Timeline](./assets/BeforeRentTimeline.png)
+![Before Renting Memory Allocation](./assets/BeforeRentMemoryAlloc.png)
+
+GC time is 13.4% of total time (12,753ms)
+
+After:
+![After Renting Timeline](./assets/AfterRentTimeline.png)
+![After Renting Memory Allocation](./assets/AfterRentMemoryAlloc.png)
+
+82,026ms (82.026s, 1m22s) - 65.1% improvement over baseline\
+GC time is 15.2% of total time (12,468ms)
