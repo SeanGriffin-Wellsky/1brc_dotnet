@@ -9,9 +9,9 @@ Apple SSD AP0512N 512 GB
 
 ## Baseline C# Runtime
 
-234,833ms (234.833s, 3m54s)
-7.47 GB in LOH
-GC time is ~17.5% of total time (41,096ms)
+234,833ms (234.833s, 3m54s)\
+7.47 GB in LOH\
+GC time is ~17.5% of total time (41,096ms)\
 
 ## Pre-allocate Temperature List
 
@@ -19,34 +19,34 @@ GC time is ~17.5% of total time (41,096ms)
 
 ## Read into blocks of char arrays
 
-253,976ms (253.976s, 4m14s) - 8.2% slower than baseline
+253,976ms (253.976s, 4m14s) - 8.2% slower than baseline\
 GC time is ~17.3% of total time (43,938ms)
 
 ## Read into blocks of byte arrays
 
-372,823ms (372.823s, 6m13s) - 58.8% slower than baseline
+372,823ms (372.823s, 6m13s) - 58.8% slower than baseline\
 GC time is ~23% of total time (85,749ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot1.png)
 
 ## Read into blocks of byte spans
 
-199,262ms (199.262s, 3m19s) - 15.1% improvement over baseline
+199,262ms (199.262s, 3m19s) - 15.1% improvement over baseline\
 GC time is ~13% of total time (25,904ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot2.png)
 
 ## Read into blocks of char spans
 
-166,898ms (166.898s, 2m46s) - 29.1% improvement over baseline
+166,898ms (166.898s, 2m46s) - 29.1% improvement over baseline\
 GC time is ~7% of total time (11,683ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot3.png)
 
 ## Calculate temperature statistics on the fly
 
-231,824ms (231.824s, 3m51s) - 1.3% improvement over baseline
-Heap bounces between 380 MB and 770 MB in LOH
+231,824ms (231.824s, 3m51s) - 1.3% improvement over baseline\
+Heap bounces between 380 MB and 770 MB in LOH\
 GC time is ~6.7% of total time (15,532ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot4.png)
