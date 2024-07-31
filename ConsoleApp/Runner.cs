@@ -14,24 +14,24 @@ public static class Runner
         using var reader = File.OpenText(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 22.5% of Main time, 8.9% in IO
+        var block = blockReader.ReadNextBlock(); // 16.1% of Main time, 11.8% in IO
         while (!block.IsEmpty)
         {
             var blockChars = block.Chars;
 
             var lines = blockChars.EnumerateLines();
-            foreach (var line in lines) // 13.5% of Main time
+            foreach (var line in lines) // 12.2% of Main time
             {
                 if (line.IsEmpty)
                     continue;
 
-                var semicolonPos = line.IndexOf(';'); // 9.35% of Main time
+                var semicolonPos = line.IndexOf(';'); // 10.4% of Main time
 
-                var city = line[..semicolonPos].ToString(); // 6.18% of Main time
+                var city = line[..semicolonPos].ToString(); // 6.63% of Main time
                 var tempStr = line[(semicolonPos + 1)..];
                 var temp = TemperatureParser.ParseTemp(tempStr); // Negligible
 
-                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 29.2% of Main time
+                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 35.8% of Main time
                 {
                     temps = new RunningStats();
                     cityWithTempStats.Add(city, temps);
