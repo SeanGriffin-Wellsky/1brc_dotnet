@@ -9,29 +9,29 @@ public static class Runner
 
     public static StringBuilder Run(string filePath)
     {
-        var cityWithTempStats = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
+        var cityWithTempStats = new Dictionary<string, RunningStats>(ExpectedCityCnt);
 
         using var reader = File.OpenText(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 10.1% of Main time, 4.5% in IO
+        var block = blockReader.ReadNextBlock(); // 15.2% of Main time, 6.9% in IO
         while (!block.IsEmpty)
         {
             var blockChars = block.Chars;
 
             var lines = blockChars.EnumerateLines();
-            foreach (var line in lines) // 6.09% of Main time
+            foreach (var line in lines) // 7.26% of Main time
             {
                 if (line.IsEmpty)
                     continue;
 
-                var semicolonPos = line.IndexOf(';'); // 3.67% of Main time
+                var semicolonPos = line.IndexOf(';'); // 5.8% of Main time
 
-                var city = line[..semicolonPos].ToString(); // 2.9% of Main time
+                var city = line[..semicolonPos].ToString(); // 3.08% of Main time
                 var tempStr = line[(semicolonPos + 1)..];
-                var temp = float.Parse(tempStr); // 24.1% of Main time
+                var temp = float.Parse(tempStr); // 34.3% of Main time
 
-                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 42.5% of Main time
+                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 21.2% of Main time
                 {
                     temps = new RunningStats();
                     cityWithTempStats.Add(city, temps);
@@ -43,10 +43,11 @@ public static class Runner
             block = blockReader.ReadNextBlock();
         }
 
+        var finalStats = new SortedDictionary<string, RunningStats>(cityWithTempStats, StringComparer.Ordinal); // 0.04% of Main time
         var finalBuffer = new StringBuilder(12 * 1024);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",
-            cityWithTempStats.Select(kv => $"{kv.Key}={kv.Value}"));
+            finalStats.Select(kv => $"{kv.Key}={kv.Value}"));
         finalBuffer.Append('}');
 
         return finalBuffer;

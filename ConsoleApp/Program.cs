@@ -6,9 +6,9 @@ namespace ConsoleApp;
 
 public class Program
 {
-    private static readonly string InputFile = "./resources/measurements_1B.txt";
+    private static readonly string InputFile = "./resources/measurements_100M.txt";
 
-    // 61.3% in native code - ??
+    // 63.2% in native code - ??
     public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
