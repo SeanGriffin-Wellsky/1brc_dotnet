@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Text;
 
 namespace ConsoleApp;
 
@@ -8,7 +6,7 @@ public class Program
 {
     private static readonly string InputFile = "./resources/measurements_100M.txt";
 
-    // 63.2% in native code - ??
+    // 65.3% in native code - ??
     public static void Main(string[] args)
     {
         var sw = Stopwatch.StartNew();

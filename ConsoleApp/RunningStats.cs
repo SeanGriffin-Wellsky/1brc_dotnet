@@ -2,12 +2,12 @@ namespace ConsoleApp;
 
 public sealed class RunningStats
 {
-    private float _min;
-    private float _max;
-    private float _temperatureSum;
+    private int _min;
+    private int _max;
+    private int _temperatureSum;
     private int _numTemperatures;
 
-    public void AddTemperature(float temperature)
+    public void AddTemperature(int temperature)
     {
         if (temperature < _min) _min = temperature;
         if (temperature > _max) _max = temperature;
@@ -18,7 +18,9 @@ public sealed class RunningStats
 
     public override string ToString()
     {
-        var avg = _temperatureSum / _numTemperatures;
-        return $"{_min:F1}/{avg:F1}/{_max:F1}";
+        var min = _min / 10.0f;
+        var max = _max / 10.0f;
+        var avg = _temperatureSum / 10.0f / _numTemperatures;
+        return $"{min:F1}/{avg:F1}/{max:F1}";
     }
 }

@@ -14,24 +14,24 @@ public static class Runner
         using var reader = File.OpenText(filePath);
 
         var blockReader = new BlockReader(reader, BufferSize);
-        var block = blockReader.ReadNextBlock(); // 15.2% of Main time, 6.9% in IO
+        var block = blockReader.ReadNextBlock(); // 22.5% of Main time, 8.9% in IO
         while (!block.IsEmpty)
         {
             var blockChars = block.Chars;
 
             var lines = blockChars.EnumerateLines();
-            foreach (var line in lines) // 7.26% of Main time
+            foreach (var line in lines) // 13.5% of Main time
             {
                 if (line.IsEmpty)
                     continue;
 
-                var semicolonPos = line.IndexOf(';'); // 5.8% of Main time
+                var semicolonPos = line.IndexOf(';'); // 9.35% of Main time
 
-                var city = line[..semicolonPos].ToString(); // 3.08% of Main time
+                var city = line[..semicolonPos].ToString(); // 6.18% of Main time
                 var tempStr = line[(semicolonPos + 1)..];
-                var temp = float.Parse(tempStr); // 34.3% of Main time
+                var temp = TemperatureParser.ParseTemp(tempStr); // Negligible
 
-                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 21.2% of Main time
+                if (!cityWithTempStats.TryGetValue(city, out var temps)) // 29.2% of Main time
                 {
                     temps = new RunningStats();
                     cityWithTempStats.Add(city, temps);
@@ -43,7 +43,7 @@ public static class Runner
             block = blockReader.ReadNextBlock();
         }
 
-        var finalStats = new SortedDictionary<string, RunningStats>(cityWithTempStats, StringComparer.Ordinal); // 0.04% of Main time
+        var finalStats = new SortedDictionary<string, RunningStats>(cityWithTempStats, StringComparer.Ordinal);
         var finalBuffer = new StringBuilder(12 * 1024);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",
