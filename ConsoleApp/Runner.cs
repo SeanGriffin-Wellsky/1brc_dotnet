@@ -4,17 +4,16 @@ namespace ConsoleApp;
 
 public static class Runner
 {
-    private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
 
     public static async Task<StringBuilder> Run(string filePath)
     {
-        using var reader = File.OpenText(filePath);
+        await using var reader = File.OpenRead(filePath);
         var blockReader = new BlockReader(reader, BufferSize);
 
         var processorTasks = new List<Task<RunningStatsDictionary>>(205);
 
-        var block = blockReader.ReadNextBlock(); // 9.24%, 4.6% in IO
+        var block = blockReader.ReadNextBlock(); // 7.33%, 2.7% in IO
         while (!block.IsEmpty)
         {
             processorTasks.Add(Task.Factory.StartNew(BlockProcessor.ProcessBlock, block));
@@ -28,7 +27,7 @@ public static class Runner
         {
             foreach (var (city, stats) in blockStats)
             {
-                var cityAsStr = city.ToString();
+                var cityAsStr = Encoding.UTF8.GetString(city.Span);
                 if (!finalStats.TryGetValue(cityAsStr, out var total))
                 {
                     total = new RunningStats();

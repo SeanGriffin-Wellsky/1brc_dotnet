@@ -2,7 +2,7 @@ namespace ConsoleApp;
 
 public static class TemperatureParser
 {
-    public static int ParseTemp(ReadOnlySpan<char> temp)
+    public static int ParseTemp(ReadOnlySpan<byte> temp)
     {
         // The char encoding starts char '0' at code 48
         const int zeroCode = 48;

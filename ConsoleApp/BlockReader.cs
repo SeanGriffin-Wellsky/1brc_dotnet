@@ -5,22 +5,22 @@ namespace ConsoleApp;
 
 public sealed class Block
 {
-    private readonly char[]? _rentedArray;
+    private readonly byte[]? _rentedArray;
 
     public Block()
     {
         Length = 0;
-        Chars = ReadOnlyMemory<char>.Empty;
+        Chars = ReadOnlyMemory<byte>.Empty;
         _rentedArray = null;
     }
 
-    public Block(ReadOnlySpan<char> initialBuffer, ReadOnlySpan<char> supplementalBuffer)
+    public Block(ReadOnlySpan<byte> initialBuffer, ReadOnlySpan<byte> supplementalBuffer)
     {
         Debug.Assert(initialBuffer.Length > 0);
 
         Length = initialBuffer.Length + supplementalBuffer.Length;
 
-        _rentedArray = ArrayPool<char>.Shared.Rent(Length);
+        _rentedArray = ArrayPool<byte>.Shared.Rent(Length);
 
         initialBuffer.CopyTo(_rentedArray);
         supplementalBuffer.CopyTo(_rentedArray.AsSpan().Slice(initialBuffer.Length, supplementalBuffer.Length));
@@ -30,7 +30,7 @@ public sealed class Block
 
     public bool IsEmpty => Length == 0;
 
-    public ReadOnlyMemory<char> Chars { get; private set; }
+    public ReadOnlyMemory<byte> Chars { get; private set; }
 
     public int Length { get; private set; }
 
@@ -38,7 +38,7 @@ public sealed class Block
     {
         if (_rentedArray != null)
         {
-            ArrayPool<char>.Shared.Return(_rentedArray);
+            ArrayPool<byte>.Shared.Return(_rentedArray);
         }
 
         Length = 0;
@@ -46,10 +46,10 @@ public sealed class Block
     }
 }
 
-public sealed class BlockReader(StreamReader reader, int bufferSize)
+public sealed class BlockReader(Stream reader, int bufferSize)
 {
-    private readonly char[] _buffer = new char[bufferSize];
-    private readonly char[] _supplementalBuffer = new char[105];
+    private readonly byte[] _buffer = new byte[bufferSize];
+    private readonly byte[] _supplementalBuffer = new byte[105];
 
     public Block ReadNextBlock()
     {
@@ -61,20 +61,20 @@ public sealed class BlockReader(StreamReader reader, int bufferSize)
 
         if (numRead < bufferSize)
         {
-            return new Block(_buffer.AsSpan()[..numRead], Array.Empty<char>());
+            return new Block(_buffer.AsSpan()[..numRead], Array.Empty<byte>());
         }
 
         var supplementalBufferPos = -1;
-        var nextByte = reader.Read();
+        var nextByte = reader.ReadByte();
 
         while (nextByte != -1)
         {
-            _supplementalBuffer[++supplementalBufferPos] = (char) nextByte;
+            _supplementalBuffer[++supplementalBufferPos] = (byte) nextByte;
 
-            if (nextByte == '\n')
+            if (nextByte == Constants.NewLine)
                 break;
 
-            nextByte = reader.Read();
+            nextByte = reader.ReadByte();
         }
 
         return new Block(_buffer, _supplementalBuffer.AsSpan()[..(supplementalBufferPos+1)]);

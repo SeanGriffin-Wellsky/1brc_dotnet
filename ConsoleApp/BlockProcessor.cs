@@ -14,24 +14,24 @@ public static class BlockProcessor
         var cityWithTempStats = new RunningStatsDictionary(ExpectedCityCnt);
 
         var blockChars = block.Chars;
-        var lines = blockChars.Span.EnumerateLines();
-        foreach (var line in lines) // 5.91% of time
+        var lines = new BytesSpanLineEnumerator(blockChars.Span);
+        foreach (var line in lines) // 2.09% of time
         {
             if (line.IsEmpty)
                 continue;
 
-            var semicolonPos = line.IndexOf(';'); // 3.43% of time
+            var semicolonPos = line.IndexOf(Constants.Semicolon);
 
             var city = line[..semicolonPos];
             var tempStr = line[(semicolonPos + 1)..];
-            var temp = TemperatureParser.ParseTemp(tempStr); // Negligible
+            var temp = TemperatureParser.ParseTemp(tempStr);
 
-            var cityHashCode = SpanEqualityUtil.GetHashCode(city); // 2.44% of time
+            var cityHashCode = cityWithTempStats.GetHashCode(city); // 1.69% of time
 
-            if (!cityWithTempStats.TryGetValue(cityHashCode, city, out var temps)) // 0.02% of time
+            if (!cityWithTempStats.TryGetValue(cityHashCode, city, out var temps))
             {
                 temps = new RunningStats();
-                cityWithTempStats.Add(cityHashCode, city, temps); // 0.03% of time
+                cityWithTempStats.Add(cityHashCode, city, temps); // Negligible
             }
 
             temps.AddTemperature(temp);

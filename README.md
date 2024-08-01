@@ -106,3 +106,8 @@ GC time is 0.25% of total time (48ms)
 
 ![Heap Growth](./assets/MultiThreadingHeap2.png)
 ![Memory Snapshot](./assets/MultiThreadingMemorySnapshot2.png)
+
+## Read into blocks of byte spans (Attempt 2)
+
+(9192ms + 9283ms + 9418ms) / 3 = 9297.67ms (9.30s, 9s) - 96.1% improvement over baseline\
+GC time is 0.65% of total time (60ms)

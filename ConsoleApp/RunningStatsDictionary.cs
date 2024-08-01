@@ -6,21 +6,21 @@ using System.Runtime.InteropServices;
 
 namespace ConsoleApp;
 
-public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>
+public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>
 {
     // Use larger hashtable size To reduce # of hash code clashes
     // Ensure odd number to reduce clustering (ideally prime but calculating the prime is expensive)
     private readonly int _hashTableSize = capacity * 4 + 1;
 
-    private readonly List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>?[] _dict =
-        new List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>?[capacity * 4 + 1];
+    private readonly List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>?[] _dict =
+        new List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>?[capacity * 4 + 1];
 
     public int Count => GetEnumerable().Count();
 
-    public int GetHashCode(ReadOnlySpan<char> key) =>
+    public int GetHashCode(ReadOnlySpan<byte> key) =>
         (SpanEqualityUtil.GetHashCode(key) & int.MaxValue) % _hashTableSize;
 
-    public bool TryGetValue(int keyHashCode, ReadOnlySpan<char> key, [MaybeNullWhen(false)] out RunningStats stats)
+    public bool TryGetValue(int keyHashCode, ReadOnlySpan<byte> key, [MaybeNullWhen(false)] out RunningStats stats)
     {
         Debug.Assert(keyHashCode == GetHashCode(key));
 
@@ -35,7 +35,7 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         return false;
     }
 
-    public void Add(int keyHashCode, ReadOnlySpan<char> key, RunningStats value)
+    public void Add(int keyHashCode, ReadOnlySpan<byte> key, RunningStats value)
     {
         Debug.Assert(keyHashCode == GetHashCode(key));
 
@@ -46,19 +46,19 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         }
         else
         {
-            matches = new List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>(5);
+            matches = new List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>(5);
             _dict[keyHashCode] = matches;
         }
 
-        var keyBuffer = new char[key.Length];
+        var keyBuffer = new byte[key.Length];
         key.CopyTo(keyBuffer);
-        var keyAsMemory = new ReadOnlyMemory<char>(keyBuffer);
+        var keyAsMemory = new ReadOnlyMemory<byte>(keyBuffer);
 
         matches.Add(KeyValuePair.Create(keyAsMemory, value));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static RunningStats? FindMatch(ReadOnlySpan<char> key, List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> potentialMatches)
+    private static RunningStats? FindMatch(ReadOnlySpan<byte> key, List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>> potentialMatches)
     {
         foreach (var match in CollectionsMarshal.AsSpan(potentialMatches))
         {
@@ -87,10 +87,10 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         Console.WriteLine(string.Join(',', _dict.Select(entry => entry?.Count ?? 0)));
     }
 
-    public IEnumerator<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
+    public IEnumerator<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerable() =>
+    private IEnumerable<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>> GetEnumerable() =>
         _dict.Where(v => v is not null).SelectMany(x => x!);
 }
