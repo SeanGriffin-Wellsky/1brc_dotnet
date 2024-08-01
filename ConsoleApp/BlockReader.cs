@@ -1,18 +1,16 @@
 using System.Buffers;
-using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace ConsoleApp;
 
-public readonly ref struct Block
+public sealed class Block
 {
     private readonly char[]? _rentedArray;
 
     public Block()
     {
         Length = 0;
-        Chars = ReadOnlySpan<char>.Empty;
+        Chars = ReadOnlyMemory<char>.Empty;
         _rentedArray = null;
     }
 
@@ -27,14 +25,14 @@ public readonly ref struct Block
         initialBuffer.CopyTo(_rentedArray);
         supplementalBuffer.CopyTo(_rentedArray.AsSpan().Slice(initialBuffer.Length, supplementalBuffer.Length));
 
-        Chars = _rentedArray.AsSpan(0, Length);
+        Chars = _rentedArray.AsMemory(0, Length);
     }
 
     public bool IsEmpty => Length == 0;
 
-    public ReadOnlySpan<char> Chars { get; }
+    public ReadOnlyMemory<char> Chars { get; private set; }
 
-    public int Length { get; }
+    public int Length { get; private set; }
 
     public void Dispose()
     {
@@ -42,6 +40,9 @@ public readonly ref struct Block
         {
             ArrayPool<char>.Shared.Return(_rentedArray);
         }
+
+        Length = 0;
+        Chars = null;
     }
 }
 

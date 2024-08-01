@@ -16,6 +16,15 @@ public sealed class RunningStats
         _numTemperatures++;
     }
 
+    public void Merge(RunningStats other)
+    {
+        if (other._min < _min) _min = other._min;
+        if (other._max > _max) _max = other._max;
+
+        _temperatureSum += other._temperatureSum;
+        _numTemperatures += other._numTemperatures;
+    }
+
     public override string ToString()
     {
         var min = _min / 10.0f;
