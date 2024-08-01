@@ -109,5 +109,16 @@ GC time is 0.25% of total time (48ms)
 
 ## Read into blocks of byte spans (Attempt 2)
 
-(9192ms + 9283ms + 9418ms) / 3 = 9297.67ms (9.30s, 9s) - 96.1% improvement over baseline\
+(9192ms + 9283ms + 9418ms) / 3 = 9297.67ms (9.30s) - 96.1% improvement over baseline\
+Heap grows to 8.65 GB in LOH\
 GC time is 0.65% of total time (60ms)
+
+![Heap Growth](./assets/ByteSpanHeap.png)
+
+## Read blocks in parallel, use unmanaged memory, merge stats as tasks complete
+
+(8602ms + 9017ms + 9019ms) / 3 = 8879.33ms (8.88) - 96.2% improvement over baseline\
+Heap grows to 1.35 GB in unmanaged memory\
+GC time is 0.38% of total time (33.7ms)
+
+![Timeline](./assets/NativeConcurrentBlockTimeline.png)

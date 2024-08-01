@@ -4,7 +4,7 @@ namespace ConsoleApp;
 
 public class Program
 {
-    private static readonly string InputFile = "./resources/measurements_100M.txt";
+    private static readonly string InputFile = "./resources/measurements_1B.txt";
 
     public static async Task Main(string[] args)
     {
