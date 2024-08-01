@@ -4,9 +4,8 @@ namespace ConsoleApp;
 
 public class Program
 {
-    private static readonly string InputFile = "./resources/measurements_1B.txt";
+    private static readonly string InputFile = "./resources/measurements_10M.txt";
 
-    // 21.6% in native code - ??
     public static async Task Main(string[] args)
     {
         var sw = Stopwatch.StartNew();
