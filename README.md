@@ -86,7 +86,7 @@ GC time is 15.2% of total time (12,468ms)
 
 ## Process each block in parallel
 
-(22627ms + 23097ms + 20265ms) / 3 = 21,996ms (21.996s, 22s) - 90.6% improvement over baseline
+(21192ms + 19334ms + 20424ms) / 3 = 20316.67ms (20.31667s, 20s) - 91.3% improvement over baseline\
 
 Heap grows to 20 GB in LOH\
 GC time is 57.3% of total time (13,374ms)

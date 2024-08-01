@@ -23,22 +23,21 @@ public static class Runner
 
         var perBlockStats = await Task.WhenAll(processorTasks);
 
-        var totalStats = new Dictionary<string, RunningStats>(ExpectedCityCnt);
+        var finalStats = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
         foreach (var blockStats in perBlockStats)
         {
             foreach (var (city, stats) in blockStats)
             {
-                if (!totalStats.TryGetValue(city, out var total))
+                if (!finalStats.TryGetValue(city, out var total))
                 {
                     total = new RunningStats();
-                    totalStats.Add(city, total);
+                    finalStats.Add(city, total);
                 }
 
                 total.Merge(stats);
             }
         }
 
-        var finalStats = new SortedDictionary<string, RunningStats>(totalStats, StringComparer.Ordinal);
         var finalBuffer = new StringBuilder(12 * 1024);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",
