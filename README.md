@@ -92,7 +92,7 @@ Heap grows to 20 GB in LOH\
 GC time is 57.3% of total time (13,374ms)
 
 ![CPU Usage](./assets/MultiThreadingCpu1.png)
-![Heap Growth](./assets/MultiThreadingHeap1.png)
-![Memory Snapshot](./assets/MultiThreadingMemorySnapshot.png)
 ![Timeline](./assets/MultiThreadingTimeline1.png)
 ![ProcessBlock Hotspots](./assets/ProcessBlockHotspots.png)
+![Heap Growth](./assets/MultiThreadingHeap1.png)
+![Memory Snapshot](./assets/MultiThreadingMemorySnapshot.png)
