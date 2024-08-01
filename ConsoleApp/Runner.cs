@@ -12,9 +12,9 @@ public static class Runner
         using var reader = File.OpenText(filePath);
         var blockReader = new BlockReader(reader, BufferSize);
 
-        var processorTasks = new List<Task<Dictionary<string, RunningStats>>>(205);
+        var processorTasks = new List<Task<RunningStatsDictionary>>(205);
 
-        var block = blockReader.ReadNextBlock(); // 9.34%, 4.9% in IO
+        var block = blockReader.ReadNextBlock(); // 9.24%, 4.6% in IO
         while (!block.IsEmpty)
         {
             processorTasks.Add(Task.Factory.StartNew(BlockProcessor.ProcessBlock, block));
@@ -28,10 +28,11 @@ public static class Runner
         {
             foreach (var (city, stats) in blockStats)
             {
-                if (!finalStats.TryGetValue(city, out var total))
+                var cityAsStr = city.ToString();
+                if (!finalStats.TryGetValue(cityAsStr, out var total))
                 {
                     total = new RunningStats();
-                    finalStats.Add(city, total);
+                    finalStats.Add(cityAsStr, total);
                 }
 
                 total.Merge(stats);

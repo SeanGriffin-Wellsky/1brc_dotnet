@@ -96,3 +96,13 @@ GC time is 57.3% of total time (13,374ms)
 ![ProcessBlock Hotspots](./assets/ProcessBlockHotspots.png)
 ![Heap Growth](./assets/MultiThreadingHeap1.png)
 ![Memory Snapshot](./assets/MultiThreadingMemorySnapshot.png)
+
+## Use custom Dictionary to prevent String creations
+
+(19243ms + 18763ms + 19988ms) / 3 = 19331.33ms (19.331s, 19s) - 91.8% improvement over baseline\
+
+Heap grows to 8.14 GB in LOH\
+GC time is 0.25% of total time (48ms)
+
+![Heap Growth](./assets/MultiThreadingHeap2.png)
+![Memory Snapshot](./assets/MultiThreadingMemorySnapshot2.png)
