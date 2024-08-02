@@ -123,3 +123,7 @@ GC time is 0.38% of total time (33.7ms)
 
 ![CPU Usage](./assets/NativeConcurrentCpu.png)
 ![Timeline](./assets/NativeConcurrentBlockTimeline.png)
+
+## Run with 10K unique city names
+
+30,975ms (31s)
