@@ -4,7 +4,7 @@ namespace ConsoleApp;
 
 public static class Runner
 {
-    private const int ExpectedCityCount = 10000;
+    private const int ExpectedCityCount = 413;
     private const int BufferSize = 64 * 1024 * 1024;
 
     public static async Task<StringBuilder> Run(string filePath)
@@ -38,15 +38,6 @@ public static class Runner
                 runningStats.Merge(stats);
             }
         }
-
-        Console.WriteLine($"c({string.Join(',', totalStats.DumpCountsPerBucket())})");
-        // var upperA = 65;
-        // var j = 0;
-        // foreach (var bucketCnts in totalStats.DumpCountsPerBucket())
-        // {
-        //     Console.WriteLine($"{(char) (upperA + j)} <- c({bucketCnts})");
-        //     j++;
-        // }
 
         var finalStats = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
         foreach (var kv in totalStats)
