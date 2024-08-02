@@ -99,7 +99,7 @@ GC time is 57.3% of total time (13,374ms)
 
 ## Use custom Dictionary to prevent String creations
 
-(19243ms + 18763ms + 19988ms) / 3 = 19331.33ms (19.331s, 19s) - 91.8% improvement over baseline\
+(19243ms + 18763ms + 19988ms) / 3 = 19331ms (19.331s, 19s) - 91.8% improvement over baseline\
 
 Heap grows to 8.14 GB in LOH\
 GC time is 0.25% of total time (48ms)
@@ -109,5 +109,5 @@ GC time is 0.25% of total time (48ms)
 
 ## Read into blocks of byte spans (Attempt 2)
 
-(9192ms + 9283ms + 9418ms) / 3 = 9297.67ms (9.30s, 9s) - 96.1% improvement over baseline\
+(11539ms + 11339ms + 11762ms) / 3 = 11547ms (11.5s) - 95.1% improvement over baseline\
 GC time is 0.65% of total time (60ms)

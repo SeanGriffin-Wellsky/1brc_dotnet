@@ -26,12 +26,11 @@ public static class BlockProcessor
             var tempStr = line[(semicolonPos + 1)..];
             var temp = TemperatureParser.ParseTemp(tempStr);
 
-            var cityHashCode = cityWithTempStats.GetHashCode(city); // 1.69% of time
-
+            var cityHashCode = SpanEqualityUtil.GetHashCode(city);
             if (!cityWithTempStats.TryGetValue(cityHashCode, city, out var temps))
             {
                 temps = new RunningStats();
-                cityWithTempStats.Add(cityHashCode, city, temps); // Negligible
+                cityWithTempStats.Add(cityHashCode, city, temps);
             }
 
             temps.AddTemperature(temp);
