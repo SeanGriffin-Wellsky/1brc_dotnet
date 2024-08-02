@@ -32,16 +32,6 @@ public class Program
             totalCalc.Merge(await calcTask.Unwrap().ConfigureAwait(false));
         }
 
-        // var tempPath = Path.GetTempFileName();
-        // Console.WriteLine($"HashCodes stored in {tempPath}");
-        // await using var tempFile = File.CreateText(tempPath);
-        // foreach (var hc in SpanEqualityUtil.GetHashCodes)
-        // {
-        //     var modular = (hc.Key & 0x7fffffff) % 3319;
-        //     tempFile.WriteLine(modular);
-        // }
-        // tempFile.Close();
-
         var finalBuffer = new StringBuilder(12 * 1024);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",

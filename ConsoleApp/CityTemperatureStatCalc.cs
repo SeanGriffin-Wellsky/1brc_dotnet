@@ -78,7 +78,6 @@ public sealed class CityTemperatureStatCalc(int capacity)
 
     public SortedDictionary<string, RunningStats> FinalizeStats()
     {
-        //_stats.DumpDict();
         return _stats.ToFinalDictionary();
     }
 }
