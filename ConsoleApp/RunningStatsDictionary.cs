@@ -8,24 +8,15 @@ namespace ConsoleApp;
 
 public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>
 {
-    // Use larger hashtable size To reduce # of hash code clashes
-    // Ensure odd number to reduce clustering (ideally prime but calculating the prime is expensive)
-    private readonly int _hashTableSize = capacity * 4 + 1;
-
-    private readonly List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>?[] _dict =
-        new List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>?[capacity * 4 + 1];
+    private readonly Dictionary<int, List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>> _dict = new(capacity);
 
     public int Count => GetEnumerable().Count();
 
-    public int GetHashCode(ReadOnlySpan<char> key) =>
-        (SpanEqualityUtil.GetHashCode(key) & int.MaxValue) % _hashTableSize;
-
     public bool TryGetValue(int keyHashCode, ReadOnlySpan<char> key, [MaybeNullWhen(false)] out RunningStats stats)
     {
-        Debug.Assert(keyHashCode == GetHashCode(key));
+        Debug.Assert(keyHashCode == SpanEqualityUtil.GetHashCode(key));
 
-        var matches = _dict[keyHashCode];
-        if (matches is not null)
+        if (_dict.TryGetValue(keyHashCode, out var matches))
         {
             stats = FindMatch(key, matches);
             return stats is not null;
@@ -37,17 +28,16 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
 
     public void Add(int keyHashCode, ReadOnlySpan<char> key, RunningStats value)
     {
-        Debug.Assert(keyHashCode == GetHashCode(key));
+        Debug.Assert(keyHashCode == SpanEqualityUtil.GetHashCode(key));
 
-        var matches = _dict[keyHashCode];
-        if (matches is not null)
+        if (_dict.TryGetValue(keyHashCode, out var matches))
         {
             Debug.Assert(FindMatch(key, matches) is null);
         }
         else
         {
             matches = new List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>(5);
-            _dict[keyHashCode] = matches;
+            _dict.Add(keyHashCode, matches);
         }
 
         var keyBuffer = new char[key.Length];
@@ -71,26 +61,12 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         return null;
     }
 
-    // public SortedDictionary<string, RunningStats> ToFinalDictionary()
-    // {
-    //     var finalDict = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
-    //     foreach (var kv in this)
-    //     {
-    //         finalDict.Add(kv.Key.ToString(), kv.Value);
-    //     }
-    //
-    //     return finalDict;
-    // }
-
-    public void DumpDict()
-    {
-        Console.WriteLine(string.Join(',', _dict.Select(entry => entry?.Count ?? 0)));
-    }
+    public List<int> DumpCountsPerBucket() => _dict.Select(kvp => kvp.Value.Count).ToList();
 
     public IEnumerator<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerable() =>
-        _dict.Where(v => v is not null).SelectMany(x => x!);
+        _dict.Values.SelectMany(valueList => valueList);
 }

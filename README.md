@@ -86,7 +86,7 @@ GC time is 15.2% of total time (12,468ms)
 
 ## Process each block in parallel
 
-(21192ms + 19334ms + 20424ms) / 3 = 20316.67ms (20.31667s, 20s) - 91.3% improvement over baseline\
+(21192ms + 19334ms + 20424ms) / 3 = 20316.67ms (20.3s) - 91.3% improvement over baseline
 
 Heap grows to 20 GB in LOH\
 GC time is 57.3% of total time (13,374ms)
@@ -99,7 +99,7 @@ GC time is 57.3% of total time (13,374ms)
 
 ## Use custom Dictionary to prevent String creations
 
-(19243ms + 18763ms + 19988ms) / 3 = 19331.33ms (19.331s, 19s) - 91.8% improvement over baseline\
+(18998ms + 18773ms + 19356ms) / 3 = 19042ms (19s) - 91.9% improvement over baseline
 
 Heap grows to 8.14 GB in LOH\
 GC time is 0.25% of total time (48ms)
