@@ -126,4 +126,5 @@ GC time is 0.38% of total time (33.7ms)
 
 ## Run with 10K unique city names
 
-30,975ms (31s)
+Baseline: 364,729ms (364.7s, 6m5s)\
+Final optimizations: 30,975ms (31s) - 91.26% improvement over baseline
