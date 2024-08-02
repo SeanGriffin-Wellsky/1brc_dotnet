@@ -33,8 +33,7 @@ public static class BlockProcessor
             var tempStr = line[(semicolonPos + 1)..];
             var temp = TemperatureParser.ParseTemp(tempStr);
 
-            var cityHashCode = cityWithTempStats.GetHashCode(city);
-
+            var cityHashCode = SpanEqualityUtil.GetHashCode(city);
             if (!cityWithTempStats.TryGetValue(cityHashCode, city, out var temps))
             {
                 temps = new RunningStats();

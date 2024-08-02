@@ -9,35 +9,37 @@ namespace Benchmark;
 
 public class SpanHashCodeBenchmark
 {
-    private readonly List<ReadOnlyMemory<byte>> _sampleMemories = new(500);
-    private readonly List<string> _sampleStrings = new(500);
+    private readonly List<ReadOnlyMemory<byte>> _sampleMemories = new(10000);
+    private readonly List<string> _sampleStrings = new(10000);
 
     [GlobalSetup]
     public void Setup()
     {
-        Randomizer.Seed = new Random(10);
+        using var cityNameReader = File.OpenText("./resources/SampleCityNames_10K.txt");
 
-        for (int i = 0; i < 500; ++i)
+        var line = cityNameReader.ReadLine();
+        while (line is not null)
         {
-            var city = new Bogus.DataSets.Address().City();
-            _sampleMemories.Add(new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes(city)));
-            _sampleStrings.Add(city);
+            _sampleStrings.Add(line);
+            _sampleMemories.Add(new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes(line)));
+            line = cityNameReader.ReadLine();
         }
     }
 
-    // public void BaselineString()
-    // {
-    //     var dict = new Dictionary<string, int>(500);
-    //     foreach (var sample in _sampleStrings)
-    //     {
-    //         dict.TryAdd(sample, 13);
-    //     }
-    // }
-    
+    [Benchmark(Baseline = true)]
+    public void BaselineString()
+    {
+        var dict = new Dictionary<string, int>(10000);
+        foreach (var sample in _sampleStrings)
+        {
+            dict.TryAdd(sample, 13);
+        }
+    }
+
     // [Benchmark]
     // public void HashFirstAndLastBytePlusLength()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashFirstAndLastBytePlusLengthComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashFirstAndLastBytePlusLengthComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -47,7 +49,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void HashMultiByte()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashMultiByteComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashMultiByteComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -58,7 +60,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void HashFirstFourBytes()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashFirstFourBytesComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashFirstFourBytesComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -68,7 +70,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void HashUsingBitConverter()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashBitConverterComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashBitConverterComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -78,17 +80,27 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void HashUsingBitConverter2()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashBitConverterComparer2());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashBitConverterComparer2());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
     //     }
     // }
 
-    [Benchmark(Baseline = true)]
-    public void HashUsingBitConverter3()
+    // [Benchmark]
+    // public void HashUsingBitConverter3()
+    // {
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashBitConverterComparer3());
+    //     foreach (var sample in _sampleMemories)
+    //     {
+    //         dict.TryAdd(sample, 13);
+    //     }
+    // }
+
+    [Benchmark]
+    public void HashUsingBitConverter4()
     {
-        var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashBitConverterComparer3());
+        var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashBitConverterComparer4());
         foreach (var sample in _sampleMemories)
         {
             dict.TryAdd(sample, 13);
@@ -96,9 +108,9 @@ public class SpanHashCodeBenchmark
     }
 
     [Benchmark]
-    public void HashUsingBitConverter4()
+    public void HashUsingCopilotSuggestion()
     {
-        var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashBitConverterComparer4());
+        var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashBitConverterComparerCopilot());
         foreach (var sample in _sampleMemories)
         {
             dict.TryAdd(sample, 13);
@@ -108,7 +120,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void HashUsingHashCodeClass()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new HashCodeClassComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new HashCodeClassComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -118,7 +130,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void RotatingHash()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new RotatingHashComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new RotatingHashComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -128,7 +140,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void OneAtATimeHash()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new OneAtATimeHashComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new OneAtATimeHashComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -138,7 +150,7 @@ public class SpanHashCodeBenchmark
     // [Benchmark]
     // public void BurtleBurtleHash()
     // {
-    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(500, new BurtleBurtleHashComparer());
+    //     var dict = new Dictionary<ReadOnlyMemory<byte>, int>(10000, new BurtleBurtleHashComparer());
     //     foreach (var sample in _sampleMemories)
     //     {
     //         dict.TryAdd(sample, 13);
@@ -274,6 +286,27 @@ public class SpanHashCodeBenchmark
         }
     }
 
+    private class HashBitConverterComparerCopilot : IEqualityComparer<ReadOnlyMemory<byte>>
+    {
+        public bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => x.Span.SequenceEqual(y.Span);
+        public int GetHashCode(ReadOnlyMemory<byte> obj)
+        {
+            var span = obj.Span;
+            unchecked
+            {
+                const int prime = 31;
+                var hash = 0;
+                foreach (var b in span)
+                {
+                    hash = (hash * prime) + b;
+                }
+
+                return hash;
+            }
+        }
+    }
+
+
     private class HashCodeClassComparer : IEqualityComparer<ReadOnlyMemory<byte>>
     {
         public bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => x.Span.SequenceEqual(y.Span);
@@ -284,7 +317,7 @@ public class SpanHashCodeBenchmark
             return hashCode.ToHashCode();
         }
     }
-    
+
     private class RotatingHashComparer : IEqualityComparer<ReadOnlyMemory<byte>>
     {
         public bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => x.Span.SequenceEqual(y.Span);
@@ -301,11 +334,11 @@ public class SpanHashCodeBenchmark
             {
                 hash = (hash << 4) ^ (hash >> 28) ^ span[i];
             }
-  
+
             return hash % prime;
         }
     }
-    
+
     private class OneAtATimeHashComparer : IEqualityComparer<ReadOnlyMemory<byte>>
     {
         public bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => x.Span.SequenceEqual(y.Span);
@@ -330,7 +363,7 @@ public class SpanHashCodeBenchmark
             return hash;
         }
     }
-    
+
     public class BurtleBurtleHashComparer : IEqualityComparer<ReadOnlyMemory<byte>>
     {
         public bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => x.Span.SequenceEqual(y.Span);

@@ -4,7 +4,7 @@ namespace ConsoleApp;
 
 public static class Runner
 {
-    private const int ExpectedCityCount = 413;
+    private const int ExpectedCityCount = 10000;
     private const int BufferSize = 64 * 1024 * 1024;
 
     public static async Task<StringBuilder> Run(string filePath)
@@ -21,24 +21,40 @@ public static class Runner
             processorTasks[i] = Task.Factory.StartNew(BlockProcessor.ProcessBlock, state);
         }
 
-        var finalStats = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
+        var totalStats = new RunningStatsDictionary(ExpectedCityCount);
         foreach (var blockTask in Interleaved(processorTasks))
         {
             var blockStats = await blockTask.Unwrap().ConfigureAwait(false);
+
             foreach (var (city, stats) in blockStats)
             {
-                var cityAsStr = Encoding.UTF8.GetString(city.Span);
-                if (!finalStats.TryGetValue(cityAsStr, out var total))
+                var cityHashCode = SpanEqualityUtil.GetHashCode(city.Span);
+                if (!totalStats.TryGetValue(cityHashCode, city.Span, out var runningStats))
                 {
-                    total = new RunningStats();
-                    finalStats.Add(cityAsStr, total);
+                    runningStats = new RunningStats();
+                    totalStats.Add(cityHashCode, city.Span, runningStats);
                 }
 
-                total.Merge(stats);
+                runningStats.Merge(stats);
             }
         }
 
-        var finalBuffer = new StringBuilder(12 * 1024);
+        Console.WriteLine($"c({string.Join(',', totalStats.DumpCountsPerBucket())})");
+        // var upperA = 65;
+        // var j = 0;
+        // foreach (var bucketCnts in totalStats.DumpCountsPerBucket())
+        // {
+        //     Console.WriteLine($"{(char) (upperA + j)} <- c({bucketCnts})");
+        //     j++;
+        // }
+
+        var finalStats = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
+        foreach (var kv in totalStats)
+        {
+            finalStats.Add(Encoding.UTF8.GetString(kv.Key.Span), kv.Value);
+        }
+
+        var finalBuffer = new StringBuilder(12 * 1024 * 25);
         finalBuffer.Append('{');
         finalBuffer.AppendJoin(", ",
             finalStats.Select(kv => $"{kv.Key}={kv.Value}"));
