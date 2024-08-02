@@ -121,4 +121,5 @@ GC time is 0.65% of total time (60ms)
 Heap grows to 1.35 GB in unmanaged memory\
 GC time is 0.38% of total time (33.7ms)
 
+![CPU Usage](./assets/NativeConcurrentCpu.png)
 ![Timeline](./assets/NativeConcurrentBlockTimeline.png)
