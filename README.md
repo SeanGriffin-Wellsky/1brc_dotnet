@@ -144,3 +144,8 @@ Final optimizations: 30,975ms (31s) - 91.26% improvement over baseline
 
 Fastest solution: 2.575s\
 My solution: 10.973s
+
+## AOT vs. JIT
+
+AOT: 12.397s\
+JIT: 11.582s
