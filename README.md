@@ -131,12 +131,16 @@ Final optimizations: 30,975ms (31s) - 91.26% improvement over baseline
 
 ## GCP VM Testing
 
-### Linux (Balanced)
+| VM Machine Type | OS                  | CPU                       | RAM   | HDD Type | Run 1  | Run 2  | Run 3  | Run 4  | Run 5  | Avg (ms) | Avg (s) | $ / mo   | Compute Cost |
+|-----------------|---------------------|---------------------------|-------|----------|--------|--------|--------|--------|--------|----------|---------|----------|--------------|
+| N2D             | Ubuntu 22.04        | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 8094ms | 8170ms | 8395ms | 8322ms | 8116ms | 8223.4   | 8.22    | $508.43  | $0.0001324   |
+| N2D             | Ubuntu 22.04        | AMD EPYC Milan (2.45 GHz) | 64 GB | SSD      | 7881ms | 7971ms | 7951ms | 7966ms | 7971ms | 7948.0   | 7.95    | $518.93  | $0.0001307   |
+| N2D             | Windows Server 2022 | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 6730ms | 6981ms | 7111ms | 6866ms | 6813ms | 6900.2   | 6.90    | $1045.71 | $0.0002286   |
+| C3D             | Ubuntu 22.04        | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 7298ms | 7225ms | 7195ms | 7163ms | 7192ms | 7214.6   | 7.21    | $545.26  | $0.0001246   |
+| C3D             | Ubuntu 22.04        | AMD EPYC Genoa (2.6 GHz)  | 64 GB | SSD      | 7298ms | 7198ms | 7173ms | 7294ms | 7118ms | 7216.2   | 7.22    | $555.76  | $0.0001272   |
+| C3D             | Windows Server 2022 | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 6347ms | 6376ms | 6219ms | 6365ms | 6597ms | 6380.8   | 6.38    | $1082.54 | $0.0002189   |
 
-First run:
-Subsequent runs: (8302ms + 8170ms + 8395ms + 8322ms + 8116ms) / 5 = 8261ms (8.26s)
+## My Solution vs. Fastest Solution
 
-### Windows (Balanced)
-
-First run:
-Subsequent runs: (6730ms + 6981ms + 7111ms + 6866ms + 6813ms) / 5 = 6900.2ms (6.9s)
+Fastest solution: 2.575s\
+My solution: 10.973s
