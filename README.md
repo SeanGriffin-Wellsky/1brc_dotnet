@@ -128,3 +128,15 @@ GC time is 0.38% of total time (33.7ms)
 
 Baseline: 364,729ms (364.7s, 6m5s)\
 Final optimizations: 30,975ms (31s) - 91.26% improvement over baseline
+
+## GCP VM Testing
+
+### Linux (Balanced)
+
+First run:
+Subsequent runs: (8302ms + 8170ms + 8395ms + 8322ms + 8116ms) / 5 = 8261ms (8.26s)
+
+### Windows (Balanced)
+
+First run:
+Subsequent runs: (6730ms + 6981ms + 7111ms + 6866ms + 6813ms) / 5 = 6900.2ms (6.9s)
