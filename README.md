@@ -133,19 +133,27 @@ Final optimizations: 27,388ms (27.4s) - 92.5% improvement over baseline
 
 | VM Machine Type | OS                  | CPU                       | RAM   | HDD Type | Run 1  | Run 2  | Run 3  | Run 4  | Run 5  | Avg (ms) | Avg (s) | $ / mo   | Compute Cost |
 |-----------------|---------------------|---------------------------|-------|----------|--------|--------|--------|--------|--------|----------|---------|----------|--------------|
-| N2D             | Ubuntu 22.04        | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 8094ms | 8170ms | 8395ms | 8322ms | 8116ms | 8223.4   | 8.22    | $508.43  | $0.0001324   |
-| N2D             | Ubuntu 22.04        | AMD EPYC Milan (2.45 GHz) | 64 GB | SSD      | 7881ms | 7971ms | 7951ms | 7966ms | 7971ms | 7948.0   | 7.95    | $518.93  | $0.0001307   |
-| N2D             | Windows Server 2022 | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 6730ms | 6981ms | 7111ms | 6866ms | 6813ms | 6900.2   | 6.90    | $1045.71 | $0.0002286   |
-| C3D             | Ubuntu 22.04        | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 7298ms | 7225ms | 7195ms | 7163ms | 7192ms | 7214.6   | 7.21    | $545.26  | $0.0001246   |
-| C3D             | Ubuntu 22.04        | AMD EPYC Genoa (2.6 GHz)  | 64 GB | SSD      | 7298ms | 7198ms | 7173ms | 7294ms | 7118ms | 7216.2   | 7.22    | $555.76  | $0.0001272   |
-| C3D             | Windows Server 2022 | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 6347ms | 6376ms | 6219ms | 6365ms | 6597ms | 6380.8   | 6.38    | $1082.54 | $0.0002189   |
+| N2D             | Ubuntu 22.04        | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 6845ms | 6923ms | 6918ms | 6936ms | 6848ms | 6894.0   | 6.89    | $508.43  | $0.0001110   |
+| N2D             | Windows Server 2022 | AMD EPYC Milan (2.45 GHz) | 64 GB | Balanced | 5309ms | 5325ms | 5348ms | 5344ms | 5651ms | 5395.4   | 5.40    | $1045.71 | $0.0001789   |
+| C3D             | Ubuntu 22.04        | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 6228ms | 6318ms | 6264ms | 6240ms | 6242ms | 6258.4   | 6.26    | $545.26  | $0.0001082   |
+| C3D             | Windows Server 2022 | AMD EPYC Genoa (2.6 GHz)  | 64 GB | Balanced | 5170ms | 5159ms | 5047ms | 5056ms | 5078ms | 5102.0   | 5.10    | $1082.54 | $0.0001749   |
+
+Windows is 21.7% faster than Ubuntu on N2D, 18.5% faster on C3D.
 
 ## My Solution vs. Fastest Solution
 
-My solution: 10.973s\
-Fastest solution: 2.575s
+| Solution | SMT | Time (s) |
+|----------|-----|----------|
+| Mine     | Off | 8.689    |
+| Fastest  | Off | 2.814    |
+| Mine     | On  | 6.924    |
+| Fastest  | On  | 2.069    |
 
-## JIT vs. AOT
+## My Solution - JIT vs. AOT
 
-JIT: 11.582s\
-AOT: 12.397s
+| Method | SMT | Time (s) |
+|--------|-----|----------|
+| JIT    | Off | 8.689    |
+| AOT    | Off | 11.126   |
+| JIT    | On  | 6.924    |
+| AOT    | On  | 7.293    |
