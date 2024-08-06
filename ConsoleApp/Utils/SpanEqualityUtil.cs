@@ -1,4 +1,4 @@
-namespace ConsoleApp;
+namespace ConsoleApp.Utils;
 
 public static class SpanEqualityUtil
 {

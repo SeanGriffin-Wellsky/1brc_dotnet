@@ -1,5 +1,5 @@
+using ConsoleApp.Utils;
 using System.Diagnostics;
-using System.Resources;
 using System.Runtime.InteropServices;
 
 namespace ConsoleApp;

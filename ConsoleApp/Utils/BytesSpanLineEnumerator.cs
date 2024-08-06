@@ -1,4 +1,4 @@
-namespace ConsoleApp;
+namespace ConsoleApp.Utils;
 
 // Taken from built-in SpanLineEnumerator but with ReadOnlySpan<byte> rather than ReadOnlySpan<char> and hard-coded
 // to only handle \n as line separator, since we know that's all we'll have.
