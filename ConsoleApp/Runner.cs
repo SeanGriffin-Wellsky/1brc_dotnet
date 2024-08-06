@@ -1,10 +1,11 @@
+using System.Net;
 using System.Text;
 
 namespace ConsoleApp;
 
 public static class Runner
 {
-    private const int ExpectedCityCount = 413;
+    private const int ExpectedCityCount = 10000;
     private const int BufferSize = 64 * 1024 * 1024;
 
     public static async Task<StringBuilder> Run(string filePath)
@@ -28,14 +29,15 @@ public static class Runner
 
             foreach (var (city, stats) in blockStats)
             {
-                var cityHashCode = SpanEqualityUtil.GetHashCode(city.Span);
-                if (!totalStats.TryGetValue(cityHashCode, city.Span, out var runningStats))
+                var cityHashCode = totalStats.GetKeyHashCode(city.Span);
+                if (totalStats.TryGetValue(cityHashCode, city.Span, out var runningStats))
                 {
-                    runningStats = new RunningStats();
-                    totalStats.Add(cityHashCode, city.Span, runningStats);
+                    runningStats.Merge(stats);
                 }
-
-                runningStats.Merge(stats);
+                else
+                {
+                    totalStats.Add(cityHashCode, city.Span, stats);
+                }
             }
         }
 

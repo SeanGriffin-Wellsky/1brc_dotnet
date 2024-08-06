@@ -115,9 +115,9 @@ GC time is 0.65% of total time (60ms)
 
 ![Heap Growth](./assets/ByteSpanHeap.png)
 
-## Read blocks in parallel, use unmanaged memory, merge stats as tasks complete
+## Read blocks in parallel, use unmanaged memory, merge stats as tasks complete, use better hash table
 
-(8602ms + 9017ms + 9019ms) / 3 = 8879.33ms (8.88s) - 96.2% improvement over baseline\
+(8066ms + 8014ms + 8075ms) / 3 = 8051.67ms (8s) - 96.6% improvement over baseline\
 Heap grows to 1.35 GB in unmanaged memory\
 GC time is 0.38% of total time (33.7ms)
 
@@ -127,7 +127,7 @@ GC time is 0.38% of total time (33.7ms)
 ## Run with 10K unique city names
 
 Baseline: 364,729ms (364.7s, 6m5s)\
-Final optimizations: 30,975ms (31s) - 91.26% improvement over baseline
+Final optimizations: 27,388ms (27.4s) - 92.5% improvement over baseline
 
 ## GCP VM Testing
 
