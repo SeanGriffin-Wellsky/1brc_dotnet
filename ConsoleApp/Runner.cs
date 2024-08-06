@@ -5,7 +5,7 @@ namespace ConsoleApp;
 
 public static class Runner
 {
-    private const int ExpectedCityCount = 10000;
+    private const int ExpectedCityCount = 413;
     private const int BufferSize = 64 * 1024 * 1024;
 
     public static async Task<StringBuilder> Run(string filePath)
