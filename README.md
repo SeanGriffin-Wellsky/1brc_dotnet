@@ -113,3 +113,5 @@ GC time is 0.25% of total time (48ms)
 
 (10,942ms + 11,685ms + 11,265ms) / 3 = 11,297ms (11.3s) - 95.7% improvement over baseline
 GC time is 0.65% of total time (60ms)
+
+![Heap Growth](./assets/ByteSpanHeap.png)
