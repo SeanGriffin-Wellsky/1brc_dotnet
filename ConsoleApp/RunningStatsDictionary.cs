@@ -1,27 +1,80 @@
+using ConsoleApp.Utils;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ConsoleApp;
 
+public sealed class RunningStats
+{
+    private int _min;
+    private int _max;
+    private int _temperatureSum;
+    private int _numTemperatures;
+
+    public void AddTemperature(int temperature)
+    {
+        if (temperature < _min) _min = temperature;
+        if (temperature > _max) _max = temperature;
+
+        _temperatureSum += temperature;
+        _numTemperatures++;
+    }
+
+    public void Merge(RunningStats other)
+    {
+        if (other._min < _min) _min = other._min;
+        if (other._max > _max) _max = other._max;
+
+        _temperatureSum += other._temperatureSum;
+        _numTemperatures += other._numTemperatures;
+    }
+
+    public override string ToString()
+    {
+        var min = _min / 10.0f;
+        var max = _max / 10.0f;
+        var avg = _temperatureSum / 10.0f / _numTemperatures;
+        return $"{min:F1}/{avg:F1}/{max:F1}";
+    }
+}
+
 public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>
 {
-    private readonly int _hashTableSize = capacity * 4 + 1;
+    // A list of prime numbers to use as the size of the hash table. Stolen from System.Collections.HashHelpers within the runtime.
+    private static ReadOnlySpan<int> Primes =>
+    [
+        431, 521, 631, 761, 919, 1103, 1327, 1597, 1931, 2333, 2801, 3371, 4049, 4861,
+        5839, 7013, 8419, 10103, 12143, 14591, 17519, 21023, 25229, 30293, 36353, 43627
+    ];
 
+    private static int GetPrime(int min)
+    {
+        foreach (var prime in Primes)
+        {
+            if (prime >= min)
+            {
+                return prime;
+            }
+        }
+        return min;
+    }
+
+    // Increase the size of the hash table to reduce chance of clashes.
     private readonly List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>?[] _dict =
-        new List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>?[capacity * 4 + 1];
+        new List<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>>?[GetPrime(capacity * 4)];
 
     public int Count => GetEnumerable().Count();
 
-    public int GetHashCode(ReadOnlySpan<byte> key) =>
-        (SpanEqualityUtil.GetHashCode(key) & int.MaxValue) % _hashTableSize;
+    // Always use this to get the value of the hash code for the key passed in TryGetValue or Add!
+    public int GetKeyHashCode(ReadOnlySpan<byte> key) =>
+        (SpanEqualityUtil.GetHashCode(key) & int.MaxValue) % _dict.Length;
 
     public bool TryGetValue(int keyHashCode, ReadOnlySpan<byte> key, [MaybeNullWhen(false)] out RunningStats stats)
     {
-        Debug.Assert(keyHashCode == GetHashCode(key));
+        Debug.Assert(keyHashCode == GetKeyHashCode(key));
 
         var matches = _dict[keyHashCode];
         if (matches is not null)
@@ -36,7 +89,7 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
 
     public void Add(int keyHashCode, ReadOnlySpan<byte> key, RunningStats value)
     {
-        Debug.Assert(keyHashCode == GetHashCode(key));
+        Debug.Assert(keyHashCode == GetKeyHashCode(key));
 
         var matches = _dict[keyHashCode];
         if (matches is not null)
@@ -70,21 +123,7 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         return null;
     }
 
-    public SortedDictionary<string, RunningStats> ToFinalDictionary()
-    {
-        var finalDict = new SortedDictionary<string, RunningStats>(StringComparer.Ordinal);
-        foreach (var kv in this)
-        {
-            finalDict.Add(Encoding.UTF8.GetString(kv.Key.Span), kv.Value.FinalizeStats());
-        }
-
-        return finalDict;
-    }
-
-    public void DumpDict()
-    {
-        Console.WriteLine(string.Join(',', _dict.Select(entry => entry?.Count ?? 0)));
-    }
+    public List<int> GetDumpCountsPerBucket() => _dict.Select(entry => entry?.Count ?? 0).ToList();
 
     public IEnumerator<KeyValuePair<ReadOnlyMemory<byte>, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
 

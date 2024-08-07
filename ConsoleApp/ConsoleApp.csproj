@@ -7,13 +7,17 @@
         <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <OptimizationPreference>Speed</OptimizationPreference>
+        <IlcInstructionSet>native</IlcInstructionSet>
+        <TieredPGO>True</TieredPGO>
+        <ServerGarbageCollection>True</ServerGarbageCollection>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="resources\measurements_100K.txt">
+        <None Update="resources\measurements_5M.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="resources\measurements_5M.txt">
+        <None Update="resources\measurements_10M.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="resources\measurements_100M.txt">
@@ -24,6 +28,12 @@
         </None>
         <None Update="resources\measurements_10K_1B.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\measurements_10K_5M.txt">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\measurements_10K_1M.txt">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
