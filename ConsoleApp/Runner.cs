@@ -4,7 +4,6 @@ namespace ConsoleApp;
 
 public static class Runner
 {
-    private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
 
     public static StringBuilder Run(string filePath)
