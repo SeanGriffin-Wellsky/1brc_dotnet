@@ -1,12 +1,10 @@
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Text;
 
 namespace ConsoleApp;
 
 public class Program
 {
-    private static readonly string InputFile = "./resources/measurements_100M.txt";
+    private static readonly string InputFile = "./resources/measurements_1B.txt";
 
     // 63.2% in native code - ??
     public static void Main(string[] args)
