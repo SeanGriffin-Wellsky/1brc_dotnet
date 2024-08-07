@@ -6,6 +6,7 @@ L2 Cache (per Core): 256 KB\
 L3 Cache:	16 MB\
 32 GB 2667 MHz DDR4\
 Apple SSD AP0512N 512 GB
+Hyperthreading: *Off*
 
 ## Baseline Output
 
@@ -13,6 +14,6 @@ Apple SSD AP0512N 512 GB
 
 ## Baseline C# Runtime
 
-234,833ms (234.833s, 3m54s)
+260,985ms (260.985s, 4.35m)
 7.47 GB in LOH
 GC time is ~17.5% of total time
