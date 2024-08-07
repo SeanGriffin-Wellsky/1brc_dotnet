@@ -2,9 +2,16 @@ using System.Text;
 
 namespace ConsoleApp;
 
+readonly record struct TemperatureStats(float Min, float Avg, float Max)
+{
+    public override string ToString()
+    {
+        return $"{Min:F1}/{Avg:F1}/{Max:F1}";
+    }
+}
+
 public static class Runner
 {
-    private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
 
     public static StringBuilder Run(string filePath)
@@ -55,29 +62,5 @@ public static class Runner
         finalBuffer.Append('}');
 
         return finalBuffer;
-    }
-
-    // This uses the approach described in https://devblogs.microsoft.com/pfxteam/processing-tasks-as-they-complete/
-    private static Task<Task<T>>[] Interleaved<T>(Task<T>[] tasks)
-    {
-        var buckets = new TaskCompletionSource<Task<T>>[tasks.Length];
-        var results = new Task<Task<T>>[buckets.Length];
-        for (var i = 0; i < buckets.Length; i++)
-        {
-            buckets[i] = new TaskCompletionSource<Task<T>>();
-            results[i] = buckets[i].Task;
-        }
-
-        var nextTaskIndex = -1;
-        Action<Task<T>> continuation = completed =>
-        {
-            var bucket = buckets[Interlocked.Increment(ref nextTaskIndex)];
-            bucket.TrySetResult(completed);
-        };
-
-        foreach (var inputTask in tasks)
-            inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
-
-        return results;
     }
 }
