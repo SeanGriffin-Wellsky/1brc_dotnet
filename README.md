@@ -10,44 +10,44 @@ Hyperthreading: *Off*
 
 ## Baseline C# Runtime
 
-234,833ms (234.833s, 3m54s)\
-7.47 GB in LOH\
-GC time is ~17.5% of total time (41,096ms)\
+260,985ms (260.985s, 4.35m)
+7.47 GB in LOH
+GC time is ~17.5% of total time
 
 ## Pre-allocate Temperature List
 
-233,307ms (233.307s, 3m53s) - 0.65% improvement over baseline
+253,037ms (253.037s, 4.22m) - 3.05% improvement over baseline
 
 ## Read into blocks of char arrays
 
-253,976ms (253.976s, 4m14s) - 8.2% slower than baseline\
-GC time is ~17.3% of total time (43,938ms)
+285,698ms (285.698s, 4.76m) - 9.5% slower than baseline
+GC time is ~17.3% of total time
 
 ## Read into blocks of byte arrays
 
-372,823ms (372.823s, 6m13s) - 58.8% slower than baseline\
-GC time is ~23% of total time (85,749ms)
+406,350ms (406.350s, 6.77m) - 55.7% slower than baseline
+GC time is ~23% of total time
 
 ![Memory Snapshot](./assets/MemorySnapshot1.png)
 
 ## Read into blocks of byte spans
 
-199,262ms (199.262s, 3m19s) - 15.1% improvement over baseline\
-GC time is ~13% of total time (25,904ms)
+210,162ms (210.162, 3.5m) - 19.5% improvement over baseline
+GC time is ~13% of total time
 
 ![Memory Snapshot](./assets/MemorySnapshot2.png)
 
 ## Read into blocks of char spans
 
-166,898ms (166.898s, 2m46s) - 29.1% improvement over baseline\
+187,307ms (187.307s, 3.12m) - 28% improvement over baseline
 GC time is ~7% of total time (11,683ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot3.png)
 
 ## Calculate temperature statistics on the fly
 
-231,824ms (231.824s, 3m51s) - 1.3% improvement over baseline\
-Heap bounces between 380 MB and 770 MB in LOH\
+244,068ms (244.068s, 4.07m) - 6.4% slower than baseline
+Heap bounces between 380 MB and 770 MB in LOH
 GC time is ~6.7% of total time (15,532ms)
 
 ![Memory Snapshot](./assets/MemorySnapshot4.png)
@@ -61,11 +61,13 @@ Benchmark of `TryGetValue` + `Add` on `SortedDictionary` vs `Dictionary`:
 
 ## Use Dictionary over SortedDictionary when gathering data
 
-154,939ms (154.939s, 2m34s) - 34.1% improvement over baseline
+160,849ms (160.849s, 2.68m) - 38.4% improvement over baseline
 
 ## Use custom temperature parsing
 
-95,168ms (95.168s, 1m35s) - 59.4% improvement over baseline
+101,504ms (101.504s, 1.69m) - 61.1% improvement over baseline
+
+![Timeline](./assets/Timeline1.png)
 
 ## Rent array blocks instead of allocating new ones
 
@@ -80,13 +82,13 @@ After:
 ![After Renting Timeline](./assets/AfterRentTimeline.png)
 ![After Renting Memory Allocation](./assets/AfterRentMemoryAlloc.png)
 
-82,026ms (82.026s, 1m22s) - 65.1% improvement over baseline\
+86,636ms (86.636s, 1.44m) - 66.8% improvement over baseline\
 Heap stays constant around 390 MB in LOH\
 GC time is 15.2% of total time (12,468ms)
 
 ## Process each block in parallel
 
-(21192ms + 19334ms + 20424ms) / 3 = 20316.67ms (20.31667s, 20s) - 91.3% improvement over baseline\
+(23,002ms + 21,308ms + 23,766ms) / 3 = 22,692ms (22.692s, 22.7s) - 91.3% improvement over baseline
 
 Heap grows to 20 GB in LOH\
 GC time is 57.3% of total time (13,374ms)
