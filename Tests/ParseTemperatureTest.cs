@@ -14,7 +14,7 @@ public class ParseTemperatureTest
     [InlineData("-0.0", 0)]
     public void TestCustomFloatParsing(string numAsStr, int expected)
     {
-        var cityTemp = new CityTemp("city"u8, Encoding.UTF8.GetBytes(numAsStr));
-        Assert.Equal(expected, cityTemp.Temperature);
+        var temp = TemperatureParser.ParseTemp(Encoding.UTF8.GetBytes(numAsStr));
+        Assert.Equal(expected, temp);
     }
 }

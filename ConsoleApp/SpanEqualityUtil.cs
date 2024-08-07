@@ -4,8 +4,6 @@ public static class SpanEqualityUtil
 {
     public static bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => x.SequenceEqual(y);
 
-    public static int Compare(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => x.SequenceCompareTo(y);
-
     public static int GetHashCode(ReadOnlySpan<byte> span)
     {
         unchecked
