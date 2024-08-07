@@ -6,6 +6,7 @@ L2 Cache (per Core): 256 KB\
 L3 Cache:	16 MB\
 32 GB 2667 MHz DDR4\
 Apple SSD AP0512N 512 GB
+Hyperthreading: *Off*
 
 ## Baseline Output
 
@@ -13,22 +14,22 @@ Apple SSD AP0512N 512 GB
 
 ## Baseline C# Runtime
 
-234,833ms (234.833s, 3m54s)
+260,985ms (260.985s, 4.35m)
 7.47 GB in LOH
 GC time is ~17.5% of total time
 
 ## Pre-allocate Temperature List
 
-233,307ms (233.307s, 3m53s) - 0.65% improvement over baseline
+253,037ms (253.037s, 4.22m) - 3.05% improvement
 
 ## Read into blocks of char arrays
 
-253,976ms (253.976s, 4m14s) - 8.2% slower than baseline
+285,698ms (285.698s, 4.76m) - 9.6% slower than baseline
 GC time is ~17.3% of total time
 
 ## Read into blocks of byte arrays
 
-372,823ms (372.823s, 6m13s) - 58.8% slower than baseline
+406,350ms (406.350s, 6.77m) - 56% slower than baseline
 GC time is ~23% of total time
 
 ![Memory Snapshot](./assets/MemorySnapshot1.png)

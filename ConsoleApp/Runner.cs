@@ -1,11 +1,17 @@
-using System.Linq.Expressions;
 using System.Text;
 
 namespace ConsoleApp;
 
+readonly record struct TemperatureStats(float Min, float Avg, float Max)
+{
+    public override string ToString()
+    {
+        return $"{Min:F1}/{Avg:F1}/{Max:F1}";
+    }
+}
+
 public static class Runner
 {
-    private static readonly int ExpectedCityCnt = 413;
     private static readonly int BufferSize = 64 * 1024 * 1024;
 
     public static StringBuilder Run(string filePath)
