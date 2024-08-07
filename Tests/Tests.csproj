@@ -21,28 +21,31 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj" />
+        <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="resources\Empty.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="resources\Exactly64k_EndsInNewLine.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="resources\BarelyGreaterThan64k.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="resources\Small.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="resources\BarelyGreaterThan128k.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="resources\Exactly64k.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="resources\Empty.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\Exactly64k_EndsInNewLine.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\BarelyGreaterThan64k.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\Small.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\BarelyGreaterThan128k.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\Exactly64k.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="resources\measurements_10M.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
