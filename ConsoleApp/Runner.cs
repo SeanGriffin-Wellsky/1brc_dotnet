@@ -28,11 +28,10 @@ public static class Runner
         {
             foreach (var (city, stats) in blockStats)
             {
-                var cityAsStr = city.ToString();
-                if (!finalStats.TryGetValue(cityAsStr, out var total))
+                if (!finalStats.TryGetValue(city, out var total))
                 {
                     total = new RunningStats();
-                    finalStats.Add(cityAsStr, total);
+                    finalStats.Add(city, total);
                 }
 
                 total.Merge(stats);

@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 
 namespace ConsoleApp;
 
-public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>
+public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValuePair<string, RunningStats>>
 {
-    private readonly Dictionary<int, List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>> _dict = new(capacity);
+    private readonly Dictionary<int, List<KeyValuePair<string, RunningStats>>> _dict = new(capacity);
 
     public int Count => GetEnumerable().Count();
 
@@ -36,23 +36,23 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
         }
         else
         {
-            matches = new List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>>(5);
+            matches = new List<KeyValuePair<string, RunningStats>>(5);
             _dict.Add(keyHashCode, matches);
         }
 
         var keyBuffer = new char[key.Length];
         key.CopyTo(keyBuffer);
-        var keyAsMemory = new ReadOnlyMemory<char>(keyBuffer);
+        var keyAsStr = new string(keyBuffer);
 
-        matches.Add(KeyValuePair.Create(keyAsMemory, value));
+        matches.Add(KeyValuePair.Create(keyAsStr, value));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static RunningStats? FindMatch(ReadOnlySpan<char> key, List<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> potentialMatches)
+    private static RunningStats? FindMatch(ReadOnlySpan<char> key, List<KeyValuePair<string, RunningStats>> potentialMatches)
     {
         foreach (var match in CollectionsMarshal.AsSpan(potentialMatches))
         {
-            if (SpanEqualityUtil.Equals(key, match.Key.Span))
+            if (SpanEqualityUtil.Equals(key, match.Key.AsSpan()))
             {
                 return match.Value;
             }
@@ -63,10 +63,10 @@ public sealed class RunningStatsDictionary(int capacity) : IEnumerable<KeyValueP
 
     public List<int> DumpCountsPerBucket() => _dict.Select(kvp => kvp.Value.Count).ToList();
 
-    public IEnumerator<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
+    public IEnumerator<KeyValuePair<string, RunningStats>> GetEnumerator() => GetEnumerable().GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private IEnumerable<KeyValuePair<ReadOnlyMemory<char>, RunningStats>> GetEnumerable() =>
+    private IEnumerable<KeyValuePair<string, RunningStats>> GetEnumerable() =>
         _dict.Values.SelectMany(valueList => valueList);
 }
