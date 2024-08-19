@@ -67,8 +67,6 @@ Benchmark of `TryGetValue` + `Add` on `SortedDictionary` vs `Dictionary`:
 
 101,504ms (101.504s, 1.69m) - 61.1% improvement over baseline
 
-![Timeline](./assets/Timeline1.png)
-
 ## Rent array blocks instead of allocating new ones
 
 Before:
@@ -101,7 +99,7 @@ GC time is 57.3% of total time (13,374ms)
 
 ## Use custom Dictionary to prevent String creations
 
-(20,502ms + 17,337ms + 18,607ms) / 3 = 18,815ms (18.8s) - 92.8% improvement over baseline
+(17,561ms + 17,372ms + 16,452ms) / 3 = 17,128ms (17.1s) - 93.4% improvement over baseline
 
 Heap grows to 8.14 GB in LOH\
 GC time is 0.25% of total time (48ms)
