@@ -140,7 +140,7 @@ Final optimizations: 27,388ms (27.4s) - 92.5% improvement over baseline
 
 Windows is 21.7% faster than Ubuntu on N2D, 18.5% faster on C3D.
 
-## My Solution vs. Fastest Solution
+## My Solution vs. Fastest Solution (using Hyperfine)
 
 | Solution | SMT | Time (s) |
 |----------|-----|----------|
@@ -149,7 +149,7 @@ Windows is 21.7% faster than Ubuntu on N2D, 18.5% faster on C3D.
 | Mine     | On  | 6.924    |
 | Fastest  | On  | 2.069    |
 
-## My Solution - JIT vs. AOT
+## My Solution - JIT vs. AOT (using Hyperfine)
 
 | Method | SMT | Time (s) |
 |--------|-----|----------|
